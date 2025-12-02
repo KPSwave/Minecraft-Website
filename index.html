@@ -2,45 +2,105 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>Fun Adventure Generator</title>
+  <title>Adventure Generator + Villager Chatbot</title>
+
   <style>
     body {
+      background: #e3f7d4;
       font-family: Arial, sans-serif;
-      text-align: center;
-      margin-top: 60px;
-      background: #f0f8ff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-top: 40px;
     }
 
-    h1 {
-      font-size: 40px;
-      margin-bottom: 30px;
+    h1, h2 {
+      color: #3a5f0b;
     }
 
     button {
-      padding: 15px 25px;
+      padding: 12px 20px;
       margin: 10px;
-      font-size: 20px;
-      cursor: pointer;
+      font-size: 18px;
       border-radius: 10px;
+      cursor: pointer;
+      border: none;
+      background: #7bcf5f;
     }
 
     #output {
-      margin-top: 40px;
-      font-size: 30px;
+      margin-top: 20px;
+      font-size: 25px;
       font-weight: bold;
+      color: #2e5400;
+    }
+
+    /* Chatbot box */
+    #chatbox {
+      width: 90%;
+      max-width: 500px;
+      background: white;
+      padding: 20px;
+      border-radius: 15px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+      margin-top: 40px;
+    }
+
+    #messages {
+      height: 250px;
+      overflow-y: auto;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      margin-bottom: 15px;
+      background: #f9f9f9;
+      font-size: 18px;
+    }
+
+    .villager {
+      color: green;
+      margin-bottom: 10px;
+    }
+
+    .player {
+      color: darkblue;
+      margin-bottom: 10px;
+    }
+
+    input {
+      width: 70%;
+      padding: 12px;
+      font-size: 16px;
+      border-radius: 8px;
+      border: 1px solid #aaa;
     }
   </style>
 </head>
 
 <body>
+
   <h1>Adventure Generator</h1>
 
+  <!-- Buttons from the old code -->
   <button onclick="showMob()">Mob of the Day</button>
   <button onclick="showQuest()">Random Quest</button>
 
   <div id="output"></div>
 
+  <!-- Villager Chatbot Section -->
+  <h2>💬 Villager Chatbot</h2>
+
+  <div id="chatbox">
+    <div id="messages"></div>
+
+    <input id="userInput" type="text" placeholder="Say something to Villager...">
+    <button onclick="talkToVillager()">Talk to Villager</button>
+  </div>
+
+
   <script>
+    /* --- MOB + QUEST LISTS --- */
+
     const mobs = [
       "Creeper",
       "Zombie",
@@ -76,6 +136,49 @@
       const randomQuest = quests[Math.floor(Math.random() * quests.length)];
       document.getElementById("output").textContent = "Quest: " + randomQuest;
     }
+
+
+    /* --- VILLAGER CHATBOT --- */
+
+    const villagerResponses = [
+      "Hrmmm... hello friend!",
+      "Need help with trading? Hrmm!",
+      "A good day to trade emeralds, yes?",
+      "Be careful out there—lots of creepers. Hrmm!",
+      "Oh! A traveler! Welcome! Hrmmm.",
+      "If you need something, just ask. Hrmm!",
+      "I once saw a huge iron golem! Very strong. Hrmm.",
+      "Take an emerald, leave an emerald. That's the rule! Hrmmm."
+    ];
+
+    function talkToVillager() {
+      const input = document.getElementById("userInput");
+      const userText = input.value.trim();
+      if (userText === "") return;
+
+      addMessage("You: " + userText, "player");
+
+      const randomReply = villagerResponses[
+        Math.floor(Math.random() * villagerResponses.length)
+      ];
+
+      setTimeout(() => {
+        addMessage("Villager: " + randomReply, "villager");
+      }, 500);
+
+      input.value = "";
+    }
+
+    function addMessage(text, type) {
+      const messages = document.getElementById("messages");
+      const message = document.createElement("div");
+      message.className = type;
+      message.textContent = text;
+      messages.appendChild(message);
+
+      messages.scrollTop = messages.scrollHeight;
+    }
+
   </script>
 
 </body>
