@@ -1,185 +1,197 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Adventure Generator + Villager Chatbot</title>
-
-  <style>
+<meta charset="UTF-8">
+<title>Minecraft Fun Hub</title>
+<style>
     body {
-      background: #e3f7d4;
-      font-family: Arial, sans-serif;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding-top: 40px;
+        font-family: Arial, sans-serif;
+        background: #cce6cc;
+        padding: 20px;
+        text-align: center;
     }
 
-    h1, h2 {
-      color: #3a5f0b;
+    h1 {
+        font-size: 40px;
+        color: #3a5f0b;
+        text-shadow: 2px 2px #bada55;
     }
 
-    button {
-      padding: 12px 20px;
-      margin: 10px;
-      font-size: 18px;
-      border-radius: 10px;
-      cursor: pointer;
-      border: none;
-      background: #7bcf5f;
+    .button {
+        background: #6aa84f;
+        border: 3px solid #3d5527;
+        padding: 15px 30px;
+        font-size: 20px;
+        cursor: pointer;
+        border-radius: 10px;
+        margin: 10px;
+    }
+    .button:hover {
+        background: #8fce00;
     }
 
     #output {
-      margin-top: 20px;
-      font-size: 25px;
-      font-weight: bold;
-      color: #2e5400;
+        background: white;
+        padding: 20px;
+        margin-top: 20px;
+        border-radius: 10px;
+        border: 3px solid #3d5527;
+        width: 70%;
+        margin-left: auto;
+        margin-right: auto;
+        font-size: 20px;
     }
 
     /* Chatbot box */
-    #chatbox {
-      width: 90%;
-      max-width: 500px;
-      background: white;
-      padding: 20px;
-      border-radius: 15px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.2);
-      margin-top: 40px;
+    #villagerBox {
+        margin-top: 30px;
+        padding: 20px;
+        background: #fffbe6;
+        border: 4px solid #8b5a2b;
+        border-radius: 10px;
+        width: 80%;
+        margin-left: auto;
+        margin-right: auto;
     }
 
-    #messages {
-      height: 250px;
-      overflow-y: auto;
-      padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: 10px;
-      margin-bottom: 15px;
-      background: #f9f9f9;
-      font-size: 18px;
+    #chat {
+        height: 200px;
+        overflow-y: auto;
+        padding: 10px;
+        background: white;
+        border-radius: 10px;
+        border: 2px solid #8b5a2b;
+        margin-bottom: 10px;
+        text-align: left;
     }
 
     .villager {
-      color: green;
-      margin-bottom: 10px;
+        color: #795548;
+        font-weight: bold;
     }
 
     .player {
-      color: darkblue;
-      margin-bottom: 10px;
+        color: #1a237e;
+        font-weight: bold;
     }
 
-    input {
-      width: 70%;
-      padding: 12px;
-      font-size: 16px;
-      border-radius: 8px;
-      border: 1px solid #aaa;
+    input, button {
+        font-size: 18px;
     }
-  </style>
+
+    #apiKeyBox {
+        margin-bottom: 10px;
+    }
+</style>
 </head>
-
 <body>
 
-  <h1>Adventure Generator</h1>
+<h1>🌿 Minecraft Fun Hub 🌿</h1>
 
-  <!-- Buttons from the old code -->
-  <button onclick="showMob()">Mob of the Day</button>
-  <button onclick="showQuest()">Random Quest</button>
+<!-- MOB + QUEST Buttons -->
+<button class="button" onclick="mobOfTheDay()">Mob of the Day</button>
+<button class="button" onclick="randomQuest()">Random Quest</button>
 
-  <div id="output"></div>
+<div id="output">Click something to begin!</div>
 
-  <!-- Villager Chatbot Section -->
-  <h2>💬 Villager Chatbot</h2>
+<!-- AI Villager Chatbot -->
+<div id="villagerBox">
+    <h2>💬 Villager Chatbot (AI Powered)</h2>
 
-  <div id="chatbox">
-    <div id="messages"></div>
+    <p>Enter your OpenAI API Key:</p>
+    <input id="apiKeyBox" type="password" placeholder="sk-xxxxxxxxxxxx">
 
-    <input id="userInput" type="text" placeholder="Say something to Villager...">
-    <button onclick="talkToVillager()">Talk to Villager</button>
-  </div>
+    <div id="chat"></div>
 
+    <input id="userInput" type="text" placeholder="Say something to Villager..." style="width:70%;">
+    <button onclick="sendMessage()">Send</button>
+</div>
 
-  <script>
-    /* --- MOB + QUEST LISTS --- */
+<script>
+/* -------------------------
+   MOB OF THE DAY FUNCTION
+------------------------- */
+const mobs = [
+    "Creeper", "Zombie", "Skeleton", "Spider", "Enderman",
+    "Witch", "Villager", "Blaze", "Ghast", "Slime",
+    "Piglin", "Cow", "Pig", "Sheep", "Wolf"
+];
 
-    const mobs = [
-      "Creeper",
-      "Zombie",
-      "Skeleton",
-      "Enderman",
-      "Spider",
-      "Piglin",
-      "Blaze",
-      "Slime",
-      "Guardian",
-      "Witch"
-    ];
+function mobOfTheDay() {
+    const mob = mobs[Math.floor(Math.random() * mobs.length)];
+    document.getElementById("output").innerText = "🐾 Mob of the Day: " + mob;
+}
 
-    const quests = [
-      "Build a house using only one type of block!",
-      "Try to survive the night without weapons.",
-      "Find a village and trade with a villager.",
-      "Tame a pet and go on an adventure!",
-      "Collect 10 pieces of wool.",
-      "Explore a cave without placing torches.",
-      "Find diamonds!",
-      "Bake a cake for a friend.",
-      "Build a secret base.",
-      "Swim across an ocean!"
-    ];
+/* -------------------------
+   RANDOM QUEST FUNCTION
+------------------------- */
+const quests = [
+    "Find 5 diamonds!",
+    "Build a small wooden house!",
+    "Tame a wolf!",
+    "Collect 20 pieces of coal!",
+    "Bake a cake!",
+    "Craft a full set of iron armor!",
+    "Explore a cave!",
+    "Trade with a villager!"
+];
 
-    function showMob() {
-      const randomMob = mobs[Math.floor(Math.random() * mobs.length)];
-      document.getElementById("output").textContent = "Mob of the Day: " + randomMob;
+function randomQuest() {
+    const quest = quests[Math.floor(Math.random() * quests.length)];
+    document.getElementById("output").innerText = "📜 Random Quest: " + quest;
+}
+
+/* -------------------------
+   AI VILLAGER CHATBOT
+------------------------- */
+async function sendMessage() {
+    const chatBox = document.getElementById("chat");
+    const userInput = document.getElementById("userInput").value;
+    const apiKey = document.getElementById("apiKeyBox").value;
+
+    if (!apiKey) {
+        alert("Please enter your OpenAI API key first!");
+        return;
     }
+    if (!userInput.trim()) return;
 
-    function showQuest() {
-      const randomQuest = quests[Math.floor(Math.random() * quests.length)];
-      document.getElementById("output").textContent = "Quest: " + randomQuest;
+    // Show player message
+    chatBox.innerHTML += `<p><span class="player">You:</span> ${userInput}</p>`;
+    chatBox.scrollTop = chatBox.scrollHeight;
+
+    document.getElementById("userInput").value = "";
+
+    // Send to OpenAI
+    const villagerResponse = await askVillager(apiKey, userInput);
+
+    chatBox.innerHTML += `<p><span class="villager">Villager:</span> ${villagerResponse}</p>`;
+    chatBox.scrollTop = chatBox.scrollHeight;
+}
+
+async function askVillager(apiKey, message) {
+    try {
+        const response = await fetch("https://api.openai.com/v1/chat/completions", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${apiKey}`
+            },
+            body: JSON.stringify({
+                model: "gpt-4o-mini",
+                messages: [
+                    { role: "system", content: "You are a friendly Minecraft Villager who talks like a villager (lots of 'hrmmm', 'hmm', 'yes yes', and friendly goofy lines)." },
+                    { role: "user", content: message }
+                ]
+            })
+        });
+
+        const data = await response.json();
+        return data.choices[0].message.content;
+    } catch (err) {
+        return "Hrmm… something went wrong. Maybe your API key is invalid?";
     }
-
-
-    /* --- VILLAGER CHATBOT --- */
-
-    const villagerResponses = [
-      "Hrmmm... hello friend!",
-      "Need help with trading? Hrmm!",
-      "A good day to trade emeralds, yes?",
-      "Be careful out there—lots of creepers. Hrmm!",
-      "Oh! A traveler! Welcome! Hrmmm.",
-      "If you need something, just ask. Hrmm!",
-      "I once saw a huge iron golem! Very strong. Hrmm.",
-      "Take an emerald, leave an emerald. That's the rule! Hrmmm."
-    ];
-
-    function talkToVillager() {
-      const input = document.getElementById("userInput");
-      const userText = input.value.trim();
-      if (userText === "") return;
-
-      addMessage("You: " + userText, "player");
-
-      const randomReply = villagerResponses[
-        Math.floor(Math.random() * villagerResponses.length)
-      ];
-
-      setTimeout(() => {
-        addMessage("Villager: " + randomReply, "villager");
-      }, 500);
-
-      input.value = "";
-    }
-
-    function addMessage(text, type) {
-      const messages = document.getElementById("messages");
-      const message = document.createElement("div");
-      message.className = type;
-      message.textContent = text;
-      messages.appendChild(message);
-
-      messages.scrollTop = messages.scrollHeight;
-    }
-
-  </script>
+}
+</script>
 
 </body>
 </html>
