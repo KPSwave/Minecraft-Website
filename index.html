@@ -192,7 +192,7 @@ async function askVillager(apiKey, message) {
                 input: [
                     {
                         role: "system",
-                        content: "You are a friendly Minecraft Villager. You speak like a villager (hrmm, hmmm, yes yes), are silly, kind, and helpful."
+                        content: "You are a friendly Minecraft Villager. Speak like a villager (hrmm, hmmm, yes yes), silly and kind."
                     },
                     {
                         role: "user",
@@ -203,14 +203,27 @@ async function askVillager(apiKey, message) {
         });
 
         const data = await response.json();
-        if (data.output_text) {
-            return data.output_text;
+
+        // NEW: Properly extract the text
+        if (data.output && data.output.length > 0) {
+            for (let item of data.output) {
+                if (item.type === "message" && item.content && item.content.length > 0) {
+                    // Find first text content
+                    for (let c of item.content) {
+                        if (c.type === "output_text") {
+                            return c.text;
+                        }
+                    }
+                }
+            }
         }
-        return "Hrmm… I do not understand what I got from the server…";
+
+        return "Hrmm… something went wrong parsing the AI response!";
     } catch (err) {
         return "Hrmm… something went wrong talking to the AI server!";
     }
 }
+
 </script>
 
 </body>
