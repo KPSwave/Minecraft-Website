@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Fun Adventure Generator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin-top: 60px;
+      background: #f0f8ff;
+    }
+
+    h1 {
+      font-size: 40px;
+      margin-bottom: 30px;
+    }
+
+    button {
+      padding: 15px 25px;
+      margin: 10px;
+      font-size: 20px;
+      cursor: pointer;
+      border-radius: 10px;
+    }
+
+    #output {
+      margin-top: 40px;
+      font-size: 30px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Adventure Generator</h1>
+
+  <button onclick="showMob()">Mob of the Day</button>
+  <button onclick="showQuest()">Random Quest</button>
+
+  <div id="output"></div>
+
+  <script>
+    const mobs = [
+      "Creeper",
+      "Zombie",
+      "Skeleton",
+      "Enderman",
+      "Spider",
+      "Piglin",
+      "Blaze",
+      "Slime",
+      "Guardian",
+      "Witch"
+    ];
+
+    const quests = [
+      "Build a house using only one type of block!",
+      "Try to survive the night without weapons.",
+      "Find a village and trade with a villager.",
+      "Tame a pet and go on an adventure!",
+      "Collect 10 pieces of wool.",
+      "Explore a cave without placing torches.",
+      "Find diamonds!",
+      "Bake a cake for a friend.",
+      "Build a secret base.",
+      "Swim across an ocean!"
+    ];
+
+    function showMob() {
+      const randomMob = mobs[Math.floor(Math.random() * mobs.length)];
+      document.getElementById("output").textContent = "Mob of the Day: " + randomMob;
+    }
+
+    function showQuest() {
+      const randomQuest = quests[Math.floor(Math.random() * quests.length)];
+      document.getElementById("output").textContent = "Quest: " + randomQuest;
+    }
+  </script>
+
+</body>
+</html>
